@@ -1,0 +1,19 @@
+services:
+  sitecore-genai-users:
+    container_name: sitecore_genai_users
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "6002:6002"
+    environment:
+      - PORT=6002
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - DATABASE_URL=
+      - DOMAIN=undefined
+    volumes:
+      - .:/app
+      - /app/node_modules
