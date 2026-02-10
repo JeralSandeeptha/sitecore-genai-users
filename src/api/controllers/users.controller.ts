@@ -60,8 +60,6 @@ export const getSingleUserController: RequestHandler = async (req, res) => {
       userObj.vo_api_key = `${'*'.repeat(userObj.vo_api_key.length - 4)}${lastFour}`;
     }
 
-    console.log(userObj.vo_api_key);
-
     logger.info("Get single user query was successful");
     return res
       .status(HTTP_STATUS.OK)
