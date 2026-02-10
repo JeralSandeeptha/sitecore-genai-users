@@ -12,13 +12,14 @@ export const registerUserController: RequestHandler = async (req, res) => {
           email: email,
           password: password
         });
+        await savedUser.save();
         return res
           .status(HTTP_STATUS.CREATED)
           .json(
             new SuccessResponse(
               HTTP_STATUS.CREATED,
               "User register query was successful",
-              savedUser
+              "User Registered Successfully"
             )
           );
   } catch (error) {
@@ -38,7 +39,7 @@ export const registerUserController: RequestHandler = async (req, res) => {
 export const getSingleUserController: RequestHandler = async (req, res) => {
   const userId = req.params.userId;
   try {
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId).select('-password');;
     if (!user) {
       logger.error("User not found");
       return res
@@ -52,6 +53,15 @@ export const getSingleUserController: RequestHandler = async (req, res) => {
         );
     }
 
+    const userObj = user.toObject();
+
+    if (userObj.vo_api_key) {
+      const lastFour = userObj.vo_api_key.slice(-4);
+      userObj.vo_api_key = `${'*'.repeat(userObj.vo_api_key.length - 4)}${lastFour}`;
+    }
+
+    console.log(userObj.vo_api_key);
+
     logger.info("Get single user query was successful");
     return res
       .status(HTTP_STATUS.OK)
@@ -59,7 +69,7 @@ export const getSingleUserController: RequestHandler = async (req, res) => {
         new SuccessResponse(
           HTTP_STATUS.OK,
           "Get single user query was successful",
-          user
+          userObj
         )
       );
   } catch (error) {
@@ -94,7 +104,7 @@ export const loginUserController: RequestHandler = async (req, res) => {
       );
     }
 
-    if (!user.password === password) {
+    if (user.password !== password) {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json(
         new ErrorResponse(
           HTTP_STATUS.UNAUTHORIZED,
@@ -107,7 +117,7 @@ export const loginUserController: RequestHandler = async (req, res) => {
     // 3. Login successful
     return res.status(HTTP_STATUS.OK).json(
       new SuccessResponse(
-        HTTP_STATUS.OK,
+        HTTP_STATUS.ACCEPTED,
         "User login successful",
         {
           id: user._id,

@@ -1,4 +1,5 @@
 import './config/envConfig';
+import './config/dbConfig';
 import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -6,7 +7,7 @@ import logger from "./utils/logger";
 
 //import routes
 import appRoute from "./api/routes/app.route";
-import genAiRoute from "./api/routes/users.route";
+import userRoute from "./api/routes/users.route";
 import { envConfig } from './config/envConfig';
 
 const app: Application = express();
@@ -23,7 +24,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/v1', appRoute); // Health routes
-app.use('/api/v1/user', genAiRoute); // User routes
+app.use('/api/v1/user', userRoute); // User routes
 
 // start application
 app.listen(PORT, () => {
