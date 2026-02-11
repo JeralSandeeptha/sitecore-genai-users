@@ -85,6 +85,48 @@ export const getSingleUserController: RequestHandler = async (req, res) => {
   }
 };
 
+export const getUserApiKeyController: RequestHandler = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      logger.error("User not found");
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json(
+          new ErrorResponse(
+            HTTP_STATUS.NOT_FOUND,
+            "User not found",
+            "Get user api key query was failed"
+          )
+        );
+    }
+
+    logger.info("Get user api key query was successful");
+    return res
+      .status(HTTP_STATUS.OK)
+      .json(
+        new SuccessResponse(
+          HTTP_STATUS.OK,
+          "Get user api key query was successful",
+          user.vo_api_key
+        )
+      );
+  } catch (error) {
+    logger.error(error);
+    console.log(error);
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json(
+        new ErrorResponse(
+          HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          "Get user api key query query internal server error",
+          error
+        )
+      );
+  }
+};
+
 export const loginUserController: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
 
