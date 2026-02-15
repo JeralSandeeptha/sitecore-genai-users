@@ -169,7 +169,7 @@ export const getTasksByUserId: RequestHandler<GetTasksByUserParams> = async (req
         return res.status(HTTP_STATUS.OK).json(
             new SuccessResponse(
                 HTTP_STATUS.OK,
-                "Get tasks by userID query was failed",
+                "Get tasks by userID query was successfull",
                 tasks
             )
         );
