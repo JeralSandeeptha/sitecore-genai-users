@@ -8,10 +8,11 @@ import logger from "./utils/logger";
 //import routes
 import appRoute from "./api/routes/app.route";
 import userRoute from "./api/routes/users.route";
+import taskRoute from "./api/routes/task.route";
 import { envConfig } from './config/envConfig';
 
 const app: Application = express();
-const PORT = process.env.PORT || 6001;
+const PORT = process.env.PORT || 5001;
 
 // Middlewares
 app.use(cors({
@@ -25,6 +26,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/v1', appRoute); // Health routes
 app.use('/api/v1/user', userRoute); // User routes
+app.use('/api/v1/task', taskRoute); // Task routes
 
 // start application
 app.listen(PORT, () => {
