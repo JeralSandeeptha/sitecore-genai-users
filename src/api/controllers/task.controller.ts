@@ -127,7 +127,7 @@ export const getTaskById: RequestHandler = async (req, res) => {
             new SuccessResponse(
                 HTTP_STATUS.OK,
                 "Get single task query was successfull",
-                "Task fetched successfully",
+                task
             )
         );
     } catch (error: any) {
